@@ -1,0 +1,28 @@
+To control LED/Motor/Relay from Android app.
+
+
+
+String voice = "";
+void setup()
+{
+ Serial.begin(9600);
+ pinMode(D1,OUTPUT);
+}
+void loop()
+{
+ while(Serial.available())
+ {
+ char c = Serial.read();
+ voice = voice + c;
+ }
+Serial.println(voice);
+if(voice == "light on")
+{
+ digitalWrite(D1,LOW);// Relay module needs a low to TURN ON
+}
+if(voice == "light off")
+{
+ digitalWrite(D1,HIGH);// Relay module needs a HIGH to TURN OFF
+}
+delay(1000);
+}

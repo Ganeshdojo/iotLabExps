@@ -1,0 +1,46 @@
+To write a program to read data from DHT11 sensor and send the data to
+Blynk IoT cloud.
+
+
+
+
+: DHT11 sensor
+
+Code:
+
+
+#define BLYNK_TEMPLATE_ID "TMPL6c-qkw-Z"
+#define BLYNK_DEVICE_NAME "DHT11"
+#define BLYNK_AUTH_TOKEN "kvaAn4C6LM6VHct6SKf1FQQnT8yS_cyM"
+#include "DHT.h"
+#define DHTTYPE DHT11
+#define dht_dpin D1
+DHT dht(dht_dpin, DHTTYPE);
+#define BLYNK_PRINT Serial
+#include <ESP8266WiFi.h>
+#include <BlynkSimpleEsp8266.h>
+BlynkTimer timer;
+char auth[] = BLYNK_AUTH_TOKEN;
+char ssid[] = "happyfy";
+char pass[] = "asdfghjkl";
+void sendSensor()
+{
+ float h = dht.readHumidity();
+ float t = dht.readTemperature(); // or dht.readTemperature(true) for
+//Fahrenheit 23
+ Blynk.virtualWrite(V5, t);
+ Blynk.virtualWrite(V6, h);
+}
+void setup()
+{
+ Serial.begin(9600);
+ Blynk.begin(auth, ssid, pass);
+ dht.begin();
+ // Setup a function to be called every second
+ timer.setInterval(1000L, sendSensor);
+}
+void loop()
+{
+ Blynk.run();
+ timer.run();
+}

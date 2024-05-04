@@ -1,0 +1,105 @@
+(a)To write a program that controls relay state based on ambient light
+levels using LDR sensor.
+b) To write a program for Basic Burglar alarm security system with the
+help of PIR sensor and buzzer.
+c) To write a program Displaying humidity and temperature values on LCD.
+
+
+
+(a)
+
+Code:
+const int ledPin = 5;
+const int ldrPin = A0;
+void setup()
+{
+Serial.begin(9600);
+pinMode(ledPin, OUTPUT);
+pinMode(ldrPin, INPUT);
+}
+void loop()
+{
+ int ldrStatus = analogRead(ldrPin);
+if (ldrStatus <=300)
+ {
+ digitalWrite(ledPin, HIGH);
+ Serial.print(ldrStatus);
+ Serial.println("LDR is DARK, Relay is ON");
+}
+else
+{
+ digitalWrite(ledPin, LOW);
+ Serial.println("Relay is OFF");
+}
+}
+
+
+
+
+(b)
+
+Code:
+int buzzer = D5; //Buzzer alarm connected to D5 of nodemcu
+int PIRsensor = D1; //PIR sensor output connected to D1 of nodemcu
+void setup() {
+ Serial.begin(9600);
+ pinMode(PIRsensor, INPUT); // PIR sensor as input
+ pinMode(buzzer, OUTPUT); // Buzzer alaram as output
+ digitalWrite (buzzer, LOW);// Initially buzzer off
+}
+void loop(){
+ int state = digitalRead(PIRsensor); //Continuously check the state of PIR
+sensor
+ delay(500); //Check state of PIR after every half second
+
+ if(state == HIGH){
+ digitalWrite (buzzer, HIGH); //If intrusion detected ring the buzzer
+ delay(5000);
+ delay(5000);
+ delay(5000); //Ring buzzer for 15 seconds
+ Serial.println("Motion detected!");
+ }
+ else {
+ digitalWrite (buzzer, LOW); //No intrusion Buzzer off
+ Serial.println("Motion absent!");
+ }
+}
+
+
+
+(C)
+
+Code:
+#include <Wire.h>
+#include <LiquidCrystal_I2C.h>
+LiquidCrystal_I2C lcd(0x27,16,2);
+#include "DHT.h"
+#define DHTTYPE DHT11
+#define dht_dpin D4
+DHT dht(dht_dpin, DHTTYPE);
+void setup(void)
+{
+ dht.begin();
+ lcd.init();
+ lcd.backlight();
+ Serial.begin(9600);
+}
+void loop() {
+ float h = dht.readHumidity();
+ float t = dht.readTemperature();
+ Serial.print("Current humidity = ");
+ Serial.print(h);
+ Serial.println("% ");
+ Serial.print("temperature = ");
+ Serial.print(t);
+ Serial.println("C ");
+ lcd.setCursor(0,0);
+ lcd.print("humidity = ");
+ lcd.print(h);
+ lcd.print("%");
+ lcd.setCursor(0,1);
+ lcd.print("temperature = ");
+ lcd.print(t);
+ lcd.print("C ");
+ delay(800);
+ }

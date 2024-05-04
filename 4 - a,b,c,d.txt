@@ -1,0 +1,109 @@
+(a)To Control relay state based on input from IR sensors
+(b)To Interface stepper motor with R-Pi
+(c)To create Advanced burglar alarm security system with the help of PIR
+sensor, buzzer and keypad. (Alarm gets disabled if correct keypad
+password is entered)
+(d)To create Automated LED light control based on input from PIR (to detect
+if people are present) and LDR (ambient light level) 
+
+
+
+
+CODE:
+import RPi.GPIO as gp
+from time import sleep
+gp.setmode(gp.BOARD)
+gp.setup(12,gp.IN)
+gp.setup(32,gp.OUT)
+gp.setup(36,gp.OUT)
+while True:
+ print(not gp.input(12))
+ gp.output(32,not gp.input(12))
+ gp.output(36,not gp.input(12)) 
+
+
+
+
+
+import RPi.GPIO as GPIO
+from time import sleep
+import sys
+#assign GPIO pins for motor
+motor_channel = (29,31,33,35)
+GPIO.setwarnings(False)
+GPIO.setmode(GPIO.BOARD)
+#for defining more than 1 GPIO channel as input/output use
+GPIO.setup(motor_channel, GPIO.OUT)
+motor_direction = input('select motor direction a=anticlockwise, c=clockwise: ')
+while True:
+ try:
+16
+ if(motor_direction == 'c'):
+ print('motor running clockwise\n')
+ GPIO.output(motor_channel, (GPIO.HIGH,GPIO.LOW,GPIO.LOW,GPIO.HIGH))
+ sleep(0.02)
+ GPIO.output(motor_channel, (GPIO.HIGH,GPIO.HIGH,GPIO.LOW,GPIO.LOW))
+ sleep(0.02)
+ GPIO.output(motor_channel, (GPIO.LOW,GPIO.HIGH,GPIO.HIGH,GPIO.LOW))
+ sleep(0.02)
+ GPIO.output(motor_channel, (GPIO.LOW,GPIO.LOW,GPIO.HIGH,GPIO.HIGH))
+ sleep(0.02)
+ elif(motor_direction == 'a'):
+ print('motor running anti-clockwise\n')
+ GPIO.output(motor_channel, (GPIO.HIGH,GPIO.LOW,GPIO.LOW,GPIO.HIGH))
+ sleep(0.02)
+ GPIO.output(motor_channel, (GPIO.LOW,GPIO.LOW,GPIO.HIGH,GPIO.HIGH))
+ sleep(0.02)
+ GPIO.output(motor_channel, (GPIO.LOW,GPIO.HIGH,GPIO.HIGH,GPIO.LOW))
+ sleep(0.02)
+ GPIO.output(motor_channel, (GPIO.HIGH,GPIO.HIGH,GPIO.LOW,GPIO.LOW))
+ sleep(0.02)
+
+ #press ctrl+c for keyboard interrupt
+ except KeyboardInterrupt:
+ #query for setting motor direction or exit
+ motor_direction = input('select motor direction a=anticlockwise, c=clockwise or q=exit: ')
+ #check for exit
+ if(motor_direction == 'q'):
+ print('motor stopped')
+ sys.exit(0)
+
+
+
+
+
+
+Code:
+#include the library
+from gpiozero import MotionSensor,Buzzer,LED
+# include the PIR sensor pin
+pirSensor = MotionSensor(22)
+# Include the buzzer pin
+buzzer = Buzzer(27)
+# Include the LED bulb pin
+led = LED(17)
+while True:
+ pirSensor.wait_for_motion()# Detect the motion
+ buzzer.on()# Turn on the buzzer
+ led.on() # Turn on the LED bulb
+ print("Motion")
+ pirSensor.wait_for_no_motion()# Detect the no motion
+ print("No motion")
+ buzzer.off()#Turn off the buzzer
+ led.off()# Turn off the LED bulb
+
+
+
+
+
+
+from gpiozero import MotionSensor, LED
+from time import sleep
+pir = MotionSensor(4)
+relay = LED(17)
+while True:
+ pir.when_motion = relay.on
+ pir.when_no_motion = relay.off
+
+
+

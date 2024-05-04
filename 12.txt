@@ -1,0 +1,36 @@
+To write python program to read GPS coordinates form flight controller
+
+
+
+
+The Script: Navigating the Skies
+geo_coords_w_heading.py
+
+
+
+1#!/usr/bin/env python
+2
+3#..................................................................................
+4# Author : Saiffullah Sabir Mohamed
+5# Github : https://github.com/TechnicalVillager
+6# Website : http://technicalvillager.github.io/
+7# Source : https://github.com/TechnicalVillager/geo-coords-dronekit/
+8#..................................................................................
+9
+10# Import Necessary Packages
+11from dronekit import connect
+12
+13# Connecting the Vehicle
+14vehicle = connect('udpin:127.0.0.1:14551', baud=115200)
+15
+16# Printing Vehicle's Latitude
+17print("Vehicle's Latitude = ", vehicle.location.global_relative_frame.lat)
+18
+19# Printing Vehicle's Longitude
+20print("Vehicle's Longitude = ", vehicle.location.global_relative_frame.lon)
+21
+22# Printing Vehicle's Altitude
+23print("Vehicle's Altitude (in meters) = ", vehicle.location.global_relative_frame.alt)
+24
+25# Printing Vehicle's Heading Angle
+26print("Vehicle's Heading = ", vehicle.heading)
