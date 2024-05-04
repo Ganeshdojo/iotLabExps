@@ -1,0 +1,93 @@
+(a)To write a program that controls actuators through serial monitor.
+(b)To write a program that controls LED through push button.
+(c)To write a program that controls servo motor with the help of
+joystick.
+
+
+
+(a) Turn on Turn off relay connected to D1 pin of nodeMCU through Serial Monitor
+Circuit diagram
+1
+CODE:
+String voice = "";
+void setup()
+{
+ Serial.begin(9600);
+ pinMode(D1,OUTPUT);
+}
+void loop()
+{
+ while(Serial.available())
+ {
+ char c = Serial.read();
+ voice = voice + c;
+ }
+Serial.println(voice);
+if(voice == "light on")
+{
+ digitalWrite(D1,LOW);// Relay module needs a low to TURN ON
+}
+if(voice == "light off")
+{
+ digitalWrite(D1,HIGH);// Relay module needs a HIGH to TURN OFF
+}
+voice = "";
+delay(1000);
+}
+
+
+
+(b) Creating different led patterns and controlling them using push button switches
+Circuit diagram
+
+void setup() {
+pinMode(D3,INPUT);
+pinMode(D4,OUTPUT);
+}
+void loop() {
+int button=digitalRead(D3);
+if(button==1){
+digitalWrite(D4,LOW);
+delay(100);
+}
+else{
+digitalWrite(D4,HIGH);
+delay(100);
+}
+}
+
+
+(c) Controlling servo motor with the help of joystick 
+
+
+Code:
+#include <Servo.h>
+Servo MyServo1;
+Servo MyServo2;
+int Servo1_Position;
+int Servo2_Position;
+void setup() {
+ Serial.begin(9600);
+ MyServo1.attach(5);
+ MyServo2.attach(6);
+}
+void loop() {
+ Serial.print("Y:");
+ Serial.println(analogRead(A0));
+ Serial.print("X:");
+ Serial.println(analogRead(A1));
+ //Controlling Servo 1
+ Servo1_Position = analogRead(A0); //Reading Joystick Y position
+(Verical)
+ Servo1_Position = map(Servo1_Position, 0, 1023, 0, 180);
+ MyServo1.write(Servo1_Position);
+ delay(15);
+ //Controlling Servo 2
+ Servo2_Position = analogRead(A1); //Reading Joystick X position
+(Horizontal)
+ Servo2_Position = map(Servo2_Position, 0, 1023, 0, 180);
+ MyServo2.write(Servo2_Position);
+ delay(15);
+}
+
+(c) Controlling servo motor with the help of joystick
